@@ -124,6 +124,8 @@ class Validation extends CI_Controller
     {
         $sub = $this->input->post('subject_id');
         $top = $this->input->post('topic_id');
+        $lang = $this->input->post('lang_id');
+       // print_r($_POST);die;
         $this->db->select([
             'question',
             'option_1 as opt1', '1 AS option_order',
@@ -132,16 +134,16 @@ class Validation extends CI_Controller
             'option_4 as opt4', '4 AS option_order',
             'answer'
         ]);
-        $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top])->result_array();
+        $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code'=>$lang])->result_array();
         echo json_encode($data);
     }
 
 
     // Function to download the CSV file
-    public function getCSV($top,$sub)
+    public function getCSV($top,$sub,$lang)
     {
         $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top, 'lang_code'=>$lang]);
         $usersData = $q->result_array();
 
         // Check if there are records to export
@@ -183,10 +185,10 @@ class Validation extends CI_Controller
 
         exit;
     }
-    public function getDocument($top,$sub){
+    public function getDocument($top,$sub,$lang){
        
         $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top]);
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top,'lang_code'=>$lang]);
         $usersData = $q->result_array();
 
         // Check if there are records to export

@@ -96,14 +96,19 @@
     <form style="margin-top:20px">
         <label for="first_dropdown">Select Subject:</label>
         <select id="first_dropdown" name="first_dropdown">
-            <!-- Options for the first dropdown -->
             <option value="">Please Select Subject</option>
-
         </select>
         <br>
         <br>
         <label for="second_dropdown">Topics:</label>
         <select id="second_dropdown" name="second_dropdown">
+        </select>
+        <br>
+        <br>
+        <label for="selectLang">Language:</label>
+        <select id="selectLang" name="selectLang">
+            <option value="1">English</option>
+            <option value="2">Hindi</option>
         </select>
         <br>
         <br>
@@ -114,9 +119,9 @@
         <div class="table-responsive">
             <br />
             <h1 style="margin-left: 420px;">Questions Paper</h1>
-            <a href="" id="download" >Download</a>
+            <a href="" id="download">Download</a>
             <br>
-            <a href="" id="wordDownload" >Word Download</a>
+            <a href="" id="wordDownload">Word Download</a>
             <br>
             <table id="user_data" class="table table-bordered table-striped" style="border:2px solid black;background-color:skyblue;">
                 <!-- <thead>
@@ -202,21 +207,23 @@
 
                 var topic = $("#second_dropdown").val();
                 var sub = $("#first_dropdown").val();
+                var lang= $("#selectLang").val();
 
-             
-             var hrefa = "getCSV/"+topic+"/"+sub;
-             $('#download').attr('href' , hrefa);
-             $("#download").prop('disable' , false);
 
-             var hrefc = "getDocument/"+topic+"/"+sub;
-             $('#wordDownload').attr('href' , hrefc);
-             $("#wordDownload").prop('disable' , false);
+                var hrefa = "getCSV/" + topic + "/" + sub +"/" + lang;
+                $('#download').attr('href', hrefa);
+                $("#download").prop('disable', false);
+
+                var hrefc = "getDocument/" + topic + "/" + sub +"/" + lang;
+                $('#wordDownload').attr('href', hrefc);
+                $("#wordDownload").prop('disable', false);
                 $.ajax({
                     url: '<?php echo base_url('index.php/Validation/getQuestions'); ?>',
                     method: 'POST',
                     data: {
                         "topic_id": topic,
-                        "subject_id": sub
+                        "subject_id": sub,
+                        "lang_id":lang
                     },
                     dataType: 'json',
                     success: function(data) {
