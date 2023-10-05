@@ -26,13 +26,7 @@
 </head>
 <style>
     /* Style the form container */
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Add your JavaScript and CSS libraries here -->
-</head>
-<style>
-    body {
+    < !DOCTYPE html><html lang="en"><head>< !-- Add your JavaScript and CSS libraries here --></head><style>body {
         background-color: #f5f5f5;
         font-family: Arial, sans-serif;
         margin: 0;
@@ -80,22 +74,21 @@
         text-decoration: none;
     }
 
-    .csv, .word {
+    .csv,
+    .word {
         text-decoration: none;
         border: 1px solid black;
-        background-color: #000;
+        background-color: #337ab7;
         color: white;
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin-right: 10px;
+        border-radius: 8px;
+        padding: 10px 10px;
+        /* margin-right: 10px; */
+        float: right;
     }
 
-    .csv:hover, .word:hover {
+    .csv:hover,
+    .word:hover {
         background-color: #444;
-    }
-
-    .container {
-        margin-top: 20px;
     }
 
     h1 {
@@ -106,15 +99,29 @@
         border: 2px solid black;
         background-color: skyblue;
     }
-</style>
-<body>
-    <!-- Your existing HTML content here -->
 
-    <!-- Your JavaScript code here -->
+    .button-container {
+        text-align: center;
+        margin-top: 20px;
+    }
 
-</body>
-</html>
+    #search {
+        background-color: #337ab7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
 
+    #search:hover {
+        background-color: #23527c;
+    }
+
+    .download-buttons {
+        display: inline-block;
+        margin-right: 10px;
+    }
 </style>
 
 <body>
@@ -123,18 +130,24 @@
 
     <form style="margin-top:20px">
         <label for="first_dropdown">Select Subject:</label>
+        <br>
+        <br>
         <select id="first_dropdown" name="first_dropdown">
             <option value="">Please Select Subject</option>
         </select>
         <br>
         <br>
         <label for="second_dropdown">Select Topics:</label>
+        <br>
+        <br>
         <select id="second_dropdown" name="second_dropdown">
-        <option value="">Please Select Topic</option>
+            <option value="">Please Select Topic</option>
         </select>
         <br>
         <br>
         <label for="selectLang">Select Language:</label>
+        <br>
+        <br>
         <select id="selectLang" name="selectLang">
             <option value="">Please Select Language</option>
             <option value="1">English</option>
@@ -143,28 +156,41 @@
         <br>
         <br>
         <!-- <a href="">hello</a> -->
-        <button id="search">Search</button>
-    </form>
-    <div class="container box" style="margin-top:20px">
+        <!-- <button id="search">Search</button>
+        <div class="container box">
         <div class="table-responsive">
-            <br />
-            <h1>Questions Paper</h1>
             <a href="" id="download" class="csv">CSV format Download</a>
             <br>
             <br>
             <a href="" id="wordDownload" class="word">Word format Download</a>
             <br>
             <br>
-            <table id="user_data" class="table table-bordered table-striped" style="border:2px solid black;background-color:skyblue;">
-                <!-- <thead>
+            
+        </div> -->
+        <div class="button-container">
+            <button id="search">Search</button>
+        </div>
+
+        <div class="button-container">
+            <div class="download-buttons">
+                <a href="" id="download" class="csv">CSV format Download</a>
+            </div>
+            <div class="download-buttons">
+                <a href="" id="wordDownload" class="word">Word format Download</a>
+            </div>
+        </div>
+    </form>
+    <div>
+        <table id="user_data" class="table table-bordered table-striped" style="border:2px solid black;background-color:skyblue;">
+            <!-- <thead>
                     <tr>
                         <th width="35%" style="border:2px solid black; background-color:antiquewhite; ">question</th>
 
                     </tr>
                 </thead> -->
-            </table>
-        </div>
+        </table>
     </div>
+
     <button id="logout-btn"><a href="<?= base_url('index.php/validation/logout'); ?>">Logout</a></button>
 
     <!-- Your JavaScript code -->
@@ -239,14 +265,14 @@
 
                 var topic = $("#second_dropdown").val();
                 var sub = $("#first_dropdown").val();
-                var lang= $("#selectLang").val();
+                var lang = $("#selectLang").val();
 
 
-                var hrefa = "getCSV/" + topic + "/" + sub +"/" + lang;
+                var hrefa = "getCSV/" + topic + "/" + sub + "/" + lang;
                 $('#download').attr('href', hrefa);
                 $("#download").prop('disable', false);
 
-                var hrefc = "getDocument/" + topic + "/" + sub +"/" + lang;
+                var hrefc = "getDocument/" + topic + "/" + sub + "/" + lang;
                 $('#wordDownload').attr('href', hrefc);
                 $("#wordDownload").prop('disable', false);
                 $.ajax({
@@ -255,10 +281,11 @@
                     data: {
                         "topic_id": topic,
                         "subject_id": sub,
-                        "lang_id":lang
+                        "lang_id": lang
                     },
                     dataType: 'json',
                     success: function(data) {
+                        debugger;
                         // if (data != 0) {
                         //     $.each(data, function(index, topic) {
                         //         $("#user_data").append("<tr><td>" + topic.question +
@@ -269,7 +296,9 @@
                         //     console.log(null);
                         // }
 
-                        if (data.length > 0) {
+                        if (data.length==0) {
+                            data = [];
+                        }
                             var table = $("#user_data").DataTable({
                                 "bDestroy": true,
                                 // dom: 'Bfrtip ',
@@ -304,9 +333,7 @@
                                 ],
                                 order: [0]
                             });
-                        } else {
-                            console.log("No data available")
-                        }
+                        
                     },
                     error: function() {
                         alert("An error occurred while fetching topics.");
