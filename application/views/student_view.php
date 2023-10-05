@@ -26,27 +26,32 @@
 </head>
 <style>
     /* Style the form container */
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add your JavaScript and CSS libraries here -->
+</head>
+<style>
     body {
-        background-color: #ccc;
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
     }
 
     form {
         max-width: 400px;
         margin: 0 auto;
         padding: 20px;
-        background-color: #f5f5f5;
+        background-color: #fff;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
 
-    /* Style labels and select boxes */
     label {
-        display: block;
-        margin-bottom: 10px;
         font-weight: bold;
         color: #333;
-        /* Text color */
     }
 
     select {
@@ -55,31 +60,18 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         background-color: #fff;
-        /* Dropdown background color */
         color: #333;
-        /* Text color */
     }
 
-    /* Style the default option in dropdowns */
-    option {
+    select option {
         background-color: #fff;
-        /* Background color */
         color: #333;
-        /* Text color */
     }
 
-    /* Style the "Topics" dropdown */
-    #second_dropdown {
-        margin-top: 10px;
-    }
-
-    /* Style the default "No topics found" option */
     #second_dropdown option[value=""] {
         color: #999;
-        /* Grayed-out text color */
     }
 
-    /* Position the logout button at the top right corner */
     #logout-btn {
         position: absolute;
         top: 20px;
@@ -87,6 +79,42 @@
         color: blueviolet;
         text-decoration: none;
     }
+
+    .csv, .word {
+        text-decoration: none;
+        border: 1px solid black;
+        background-color: #000;
+        color: white;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-right: 10px;
+    }
+
+    .csv:hover, .word:hover {
+        background-color: #444;
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    #user_data {
+        border: 2px solid black;
+        background-color: skyblue;
+    }
+</style>
+<body>
+    <!-- Your existing HTML content here -->
+
+    <!-- Your JavaScript code here -->
+
+</body>
+</html>
+
 </style>
 
 <body>
@@ -100,13 +128,15 @@
         </select>
         <br>
         <br>
-        <label for="second_dropdown">Topics:</label>
+        <label for="second_dropdown">Select Topics:</label>
         <select id="second_dropdown" name="second_dropdown">
+        <option value="">Please Select Topic</option>
         </select>
         <br>
         <br>
-        <label for="selectLang">Language:</label>
+        <label for="selectLang">Select Language:</label>
         <select id="selectLang" name="selectLang">
+            <option value="">Please Select Language</option>
             <option value="1">English</option>
             <option value="2">Hindi</option>
         </select>
@@ -118,10 +148,12 @@
     <div class="container box" style="margin-top:20px">
         <div class="table-responsive">
             <br />
-            <h1 style="margin-left: 420px;">Questions Paper</h1>
-            <a href="" id="download">Download</a>
+            <h1>Questions Paper</h1>
+            <a href="" id="download" class="csv">CSV format Download</a>
             <br>
-            <a href="" id="wordDownload">Word Download</a>
+            <br>
+            <a href="" id="wordDownload" class="word">Word format Download</a>
+            <br>
             <br>
             <table id="user_data" class="table table-bordered table-striped" style="border:2px solid black;background-color:skyblue;">
                 <!-- <thead>
