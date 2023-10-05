@@ -216,20 +216,32 @@ class Validation extends CI_Controller
         // foreach ($usersData as $row) {
         //     fputcsv($output, $row);
         // }
-        foreach ($usersData as $line) {
-            // print_r($line);die;
-                        $nestedDataCSV = array();
-                        $nestedDataCSV[] = 'Question :-'.strip_tags($line['question']);
-                        $nestedDataCSV[] = 'Option1 :-'.strip_tags($line['option_1']);
-                        $nestedDataCSV[] = 'Option2 :-'.strip_tags($line['option_2']);
-                        $nestedDataCSV[] = 'Option3 :-'.strip_tags($line['option_3']);
-                        $nestedDataCSV[] = 'Option4 :-'.strip_tags($line['option_4']);
-                        $nestedDataCSV[] = 'Answer :-'.strip_tags($line['answer']);
-                        fputcsv($output, $nestedDataCSV);
-                    }
-        // Close the file pointer
-        fclose($output);
 
+
+        // foreach ($usersData as $line) {
+        //     // print_r($line);die;
+        //                 $nestedDataCSV = array();
+        //                 $nestedDataCSV[] = 'Question :-'.strip_tags($line['question']);
+        //                 $nestedDataCSV[] = 'Option1 :-'.strip_tags($line['option_1']);
+        //                 $nestedDataCSV[] = 'Option2 :-'.strip_tags($line['option_2']);
+        //                 $nestedDataCSV[] = 'Option3 :-'.strip_tags($line['option_3']);
+        //                 $nestedDataCSV[] = 'Option4 :-'.strip_tags($line['option_4']);
+        //                 $nestedDataCSV[] = 'Answer :-'.strip_tags($line['answer']);
+
+        //                 fputcsv($output, $nestedDataCSV);
+        //    }
+
+        foreach ($usersData as $line){
+            $content = 'Question: ' . preg_replace('/[,"]+/', '', strip_tags($line['question'])) . PHP_EOL;
+            $content .= 'Option_1: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_1'])) ;
+            $content .= 'Option_2: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_2'])) ;
+            $content .= 'Option_3: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_3'])) ;
+            $content .= 'Option_4: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_4'])). PHP_EOL ;
+            $content .= 'Answer: ' . preg_replace('/[,"]+/', '', strip_tags($line['answer'])) . PHP_EOL . PHP_EOL;
+
+            fwrite($output, $content);
+        }
+        fclose($output);
         exit;
     }
 }
