@@ -359,6 +359,9 @@
                             data = [];
                         }
                         var table = $("#user_data").DataTable({
+                            "paging": true,
+                            // "pageLength": 1,    
+                            "lengthMenu": [ [1, 2, 3, 4, 10, 25, 50, -1], [1, 2, 3, 4, 10, 25, 50, "All"] ],
                             "bDestroy": true,
                             // dom: 'Bfrtip ',
                             // buttons: [
