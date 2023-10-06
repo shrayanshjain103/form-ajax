@@ -92,6 +92,7 @@ class Validation extends CI_Controller
     }
     public function get_subjects()
     {
+        $this->db->select('id,name,image');
         $data = $this->db->get('course_subject_master')->result_array();
         if (!empty($data)) {
             echo json_encode($data);

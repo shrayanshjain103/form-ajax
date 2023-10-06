@@ -22,11 +22,13 @@
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 <style>
     /* Style the form container */
-    < !DOCTYPE html><html lang="en"><head>< !-- Add your JavaScript and CSS libraries here --></head><style>body {
+    body {
         background-color: #f5f5f5;
         font-family: Arial, sans-serif;
         margin: 0;
@@ -122,6 +124,9 @@
         display: inline-block;
         margin-right: 10px;
     }
+    .img-icon{
+        width:20px;
+    }
 </style>
 
 <body>
@@ -196,20 +201,58 @@
     <!-- Your JavaScript code -->
 
     <script>
+        // $(document).ready(function(){
+        //     $.ajax({
+        //             url: '<?php echo base_url('index.php/Validation/get_subjects'); ?>',
+        //             method: 'POST',
+        //             dataType: 'json',
+        //             success: function(data) {
+        //                 if (data != 0) {
+        //                     var option = "";
+        //                     // Populate the first dropdown with fetched subjects
+        //                     $.each(data, function(index, subject) {
+        //                         // option += "<option id="+subject.id+">"+`${subject.id}. ${subject.name}`+"</option>";
+        //                         option += "<option id=" + subject.id + ">" +`${subject.id}. ${subject.name}` +
+        //                 "</option>";
+        //                         // $('#first_dropdown').append($('<option>', {
+
+        //                         //     value: subject.id,
+        //                         //     text: subject.name,
+        //                         // }));
+        //                     });
+        //                     $('#first_dropdown').append(option);
+        //                 } else {
+        //                     // Handle the case when no subjects are found
+        //                     alert("No subjects found");
+        //                 }
+        //             },
+        //             error: function() {
+        //                 // Handle AJAX error here
+        //                 alert("An error occurred while fetching subjects.");
+        //             }
+        //     });
+        //     $("#first_dropdown").select2({
+        //        theme:"classic"
+        //     });
+        //  });
         $(document).ready(function() {
-            // Fetch subjects using AJAX and populate the first dropdown
             $.ajax({
                 url: '<?php echo base_url('index.php/Validation/get_subjects'); ?>',
                 method: 'POST',
                 dataType: 'json',
                 success: function(data) {
                     if (data != 0) {
+                        var option = "";
                         // Populate the first dropdown with fetched subjects
                         $.each(data, function(index, subject) {
-                            $('#first_dropdown').append($('<option>', {
-                                value: subject.id,
-                                text: subject.name
-                            }));
+                            option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
+                        });
+                        $('#first_dropdown').append(option);
+
+                        // Initialize select2 with image support
+                        $("#first_dropdown").select2({
+                            theme: "classic",
+                            templateResult: formatOption
                         });
                     } else {
                         // Handle the case when no subjects are found
@@ -221,7 +264,20 @@
                     alert("An error occurred while fetching subjects.");
                 }
             });
+
+            function formatOption(option) {
+                if (!option.id) {
+                    return option.text;
+                }
+
+                var $option = $(
+                    `<span><img src="${$(option.element).data('img')}" class="img-icon"/> ${option.text}</span>`
+                );
+
+                return $option;
+            }
         });
+
 
         $(document).ready(function() {
             $('#first_dropdown').on('change', function() {
@@ -256,6 +312,9 @@
                         alert("An error occurred while fetching topics.");
                     }
                 });
+            });
+            $("#second_dropdown").select2({
+                theme: "classic"
             });
         });
 
@@ -296,44 +355,44 @@
                         //     console.log(null);
                         // }
 
-                        if (data.length==0) {
+                        if (data.length == 0) {
                             data = [];
                         }
-                            var table = $("#user_data").DataTable({
-                                "bDestroy": true,
-                                // dom: 'Bfrtip ',
-                                // buttons: [
-                                //     'copy', 'csv', 'excel', 'print'
-                                // ],
-                                data: data,
-                                columns: [{
-                                        data: 'question',
-                                        title: 'Question'
-                                    },
-                                    {
-                                        data: 'opt1',
-                                        title: 'Option 1'
-                                    },
-                                    {
-                                        data: 'opt2',
-                                        title: 'Option 2'
-                                    },
-                                    {
-                                        data: 'opt3',
-                                        title: 'Option 3'
-                                    },
-                                    {
-                                        data: 'opt4',
-                                        title: 'Option 4'
-                                    },
-                                    {
-                                        data: 'answer',
-                                        title: 'Answer'
-                                    },
-                                ],
-                                order: [0]
-                            });
-                        
+                        var table = $("#user_data").DataTable({
+                            "bDestroy": true,
+                            // dom: 'Bfrtip ',
+                            // buttons: [
+                            //     'copy', 'csv', 'excel', 'print'
+                            // ],
+                            data: data,
+                            columns: [{
+                                    data: 'question',
+                                    title: 'Question'
+                                },
+                                {
+                                    data: 'opt1',
+                                    title: 'Option 1'
+                                },
+                                {
+                                    data: 'opt2',
+                                    title: 'Option 2'
+                                },
+                                {
+                                    data: 'opt3',
+                                    title: 'Option 3'
+                                },
+                                {
+                                    data: 'opt4',
+                                    title: 'Option 4'
+                                },
+                                {
+                                    data: 'answer',
+                                    title: 'Answer'
+                                },
+                            ],
+                            order: [0]
+                        });
+
                     },
                     error: function() {
                         alert("An error occurred while fetching topics.");
