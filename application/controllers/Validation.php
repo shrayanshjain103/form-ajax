@@ -90,23 +90,26 @@ class Validation extends CI_Controller
             }
         }
     }
-    
+
     public function get_subjects()
     {
-        $searchTerm = $this->input->post('search'); 
-        $this->db->select('id, name, image'); 
+        $searchTerm = $this->input->post('search');
+        $this->db->select('id, name, image');
         $this->db->limit(30);
         if (!empty($searchTerm)) {
             $this->db->group_start();
-            $this->db->like('name', $searchTerm, 'both'); 
-            $this->db->or_like('id', $searchTerm, 'both');
-            $this->db->group_end();// 'both' means search for the term anywhere in the 'name' field
+            if (is_numeric($searchTerm)) {
+                $this->db->like('id', $searchTerm,'after');
+            } else {
+                $this->db->like('name', $searchTerm, 'after');
+            }
+            $this->db->group_end(); // 'both' means search for the term anywhere in the 'name' field
         }
-    
+
         $data = $this->db->get('course_subject_master')->result_array();
-    
-        
-    
+
+
+
         echo json_encode($data);
     }
     public function get_table_data()

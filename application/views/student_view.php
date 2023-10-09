@@ -250,6 +250,7 @@
                 width: 'resolve',
                 allowClear: true,
                 templateResult: showImage,
+                // minimumInputLength:3,
 
                 ajax: {
                     url: '<?php echo base_url('index.php/validation/get_subjects'); ?>',
