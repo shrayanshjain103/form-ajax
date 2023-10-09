@@ -325,6 +325,7 @@
                 var topic = $("#second_dropdown").val();
                 var sub = $("#first_dropdown").val();
                 var lang = $("#selectLang").val();
+                
 
 
                 var hrefa = "getCSV/" + topic + "/" + sub + "/" + lang;
@@ -344,7 +345,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        debugger;
+                      
                         // if (data != 0) {
                         //     $.each(data, function(index, topic) {
                         //         $("#user_data").append("<tr><td>" + topic.question +

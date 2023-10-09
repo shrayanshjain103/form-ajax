@@ -126,7 +126,7 @@ class Validation extends CI_Controller
         $sub = $this->input->post('subject_id');
         $top = $this->input->post('topic_id');
         $lang = $this->input->post('lang_id');
-       // print_r($_POST);die;
+        // print_r($_POST);die;
         $this->db->select([
             'question',
             'option_1 as opt1', '1 AS option_order',
@@ -135,17 +135,18 @@ class Validation extends CI_Controller
             'option_4 as opt4', '4 AS option_order',
             'answer'
         ]);
-        $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code'=>$lang])->result_array();
+        $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang])->result_array();
         echo json_encode($data);
     }
 
 
     // Function to download the CSV file
-    public function getCSV($top,$sub,$lang)
+    public function getCSV($top, $sub, $lang)
     {
-        $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top, 'lang_code'=>$lang]);
+        $this->db->select('question, option_1, option_2, option_3, option_4, answer, description');
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang]);
         $usersData = $q->result_array();
+
 
         // Check if there are records to export
         if (empty($usersData)) {
@@ -162,34 +163,40 @@ class Validation extends CI_Controller
         $output = fopen("php://output", "w");
 
         // put the data in csv file in proper format means hindi ko hindi or english me rakhega 
-        fputs($output, "\xEF\xBB\xBF"); 
+        fputs($output, "\xEF\xBB\xBF");
 
         // Output the CSV column headers
-        fputcsv($output, array('Question', 'Option_1', 'Option_2', 'Option_3', 'Option_4', 'Answer'));
+        fputcsv($output, array('Question', 'Option_1', 'Option_2', 'Option_3', 'Option_4', 'Answer', 'Description'));
 
         // Output each row of data
         // foreach ($usersData as $row) {
         //     fputcsv($output, $row);
         // }
         foreach ($usersData as $line) {
-                        $nestedDataCSV = array();
-                        $nestedDataCSV[] = strip_tags($line['question']);
-                        $nestedDataCSV[] = strip_tags($line['option_1']);
-                        $nestedDataCSV[] = strip_tags($line['option_2']);
-                        $nestedDataCSV[] = strip_tags($line['option_3']);
-                        $nestedDataCSV[] = strip_tags($line['option_4']);
-                        $nestedDataCSV[] = strip_tags($line['answer']);
-                        fputcsv($output, $nestedDataCSV);
-                    }
+            $nestedDataCSV = array();
+            $nestedDataCSV[] = strip_tags($line['question']);
+            $nestedDataCSV[] = strip_tags($line['option_1']);
+            $nestedDataCSV[] = strip_tags($line['option_2']);
+            $nestedDataCSV[] = strip_tags($line['option_3']);
+            $nestedDataCSV[] = strip_tags($line['option_4']);
+            $nestedDataCSV[] = strip_tags($line['answer']);
+            // $nestedDataCSV[] = strip_tags($line['description']);
+            $description = htmlspecialchars_decode(strip_tags($line['description']), ENT_QUOTES | ENT_HTML5);
+            $description = str_replace('&nbsp;', "\xC2\xA0", $description);
+            $nestedDataCSV[] = $description;
+
+            fputcsv($output, $nestedDataCSV);
+        }
         // Close the file pointer
         fclose($output);
 
         exit;
     }
-    public function getDocument($top,$sub,$lang){
-       
-        $this->db->select('question, option_1, option_2, option_3, option_4, answer');
-        $q = $this->db->get_where('course_question_bank_master', ['subject_id' =>$sub , 'topic_id' =>$top,'lang_code'=>$lang]);
+    public function getDocument($top, $sub, $lang)
+    {
+
+        $this->db->select('question, option_1, option_2, option_3, option_4, answer, description');
+        $q = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang]);
         $usersData = $q->result_array();
 
         // Check if there are records to export
@@ -207,7 +214,7 @@ class Validation extends CI_Controller
         $output = fopen("php://output", "w");
 
         // put the data in csv file in proper format means hindi ko hindi or english me rakhega 
-        fputs($output, "\xEF\xBB\xBF"); 
+        fputs($output, "\xEF\xBB\xBF");
 
         // Output the CSV column headers
         //    $header=array('Question', 'Option_1', 'Option_2', 'Option_3', 'Option_4', 'Answer');
@@ -234,13 +241,15 @@ class Validation extends CI_Controller
         //                 fputcsv($output, $nestedDataCSV);
         //    }
 
-        foreach ($usersData as $line){
+        foreach ($usersData as $line) {
             $content = 'Question: ' . preg_replace('/[,"]+/', '', strip_tags($line['question'])) . PHP_EOL;
-            $content .= 'Option_1: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_1'])) ;
-            $content .= 'Option_2: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_2'])) ;
-            $content .= 'Option_3: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_3'])) ;
-            $content .= 'Option_4: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_4'])). PHP_EOL ;
+            $content .= 'Option_1: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_1']));
+            $content .= 'Option_2: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_2']));
+            $content .= 'Option_3: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_3']));
+            $content .= 'Option_4: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_4'])) . PHP_EOL;
             $content .= 'Answer: ' . preg_replace('/[,"]+/', '', strip_tags($line['answer'])) . PHP_EOL . PHP_EOL;
+            // $content .= 'Description: ' . preg_replace('/[,"]+/', '', strip_tags($line['description'])) . PHP_EOL . PHP_EOL;
+            $content .= 'Description: ' . str_replace('&nbsp;', "\xC2\xA0", htmlspecialchars_decode(strip_tags($line['description']), ENT_QUOTES | ENT_HTML5)) . PHP_EOL . PHP_EOL;
 
             fwrite($output, $content);
         }
