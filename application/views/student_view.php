@@ -124,8 +124,9 @@
         display: inline-block;
         margin-right: 10px;
     }
-    .img-icon{
-        width:20px;
+
+    .img-icon {
+        width: 20px;
     }
 </style>
 
@@ -201,77 +202,94 @@
     <!-- Your JavaScript code -->
 
     <script>
-        // $(document).ready(function(){
-        //     $.ajax({
-        //             url: '<?php echo base_url('index.php/Validation/get_subjects'); ?>',
-        //             method: 'POST',
-        //             dataType: 'json',
-        //             success: function(data) {
-        //                 if (data != 0) {
-        //                     var option = "";
-        //                     // Populate the first dropdown with fetched subjects
-        //                     $.each(data, function(index, subject) {
-        //                         // option += "<option id="+subject.id+">"+`${subject.id}. ${subject.name}`+"</option>";
-        //                         option += "<option id=" + subject.id + ">" +`${subject.id}. ${subject.name}` +
-        //                 "</option>";
-        //                         // $('#first_dropdown').append($('<option>', {
-
-        //                         //     value: subject.id,
-        //                         //     text: subject.name,
-        //                         // }));
-        //                     });
-        //                     $('#first_dropdown').append(option);
-        //                 } else {
-        //                     // Handle the case when no subjects are found
-        //                     alert("No subjects found");
-        //                 }
-        //             },
-        //             error: function() {
-        //                 // Handle AJAX error here
-        //                 alert("An error occurred while fetching subjects.");
-        //             }
-        //     });
-        //     $("#first_dropdown").select2({
-        //        theme:"classic"
-        //     });
-        //  });
         $(document).ready(function() {
-            $.ajax({
-                url: '<?php echo base_url('index.php/Validation/get_subjects'); ?>',
-                method: 'POST',
-                dataType: 'json',
-                success: function(data) {
-                    if (data != 0) {
-                        var option = "";
-                        // Populate the first dropdown with fetched subjects
-                        $.each(data, function(index, subject) {
-                            option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
-                        });
-                        $('#first_dropdown').append(option);
 
-                        // Initialize select2 with image support
-                        $("#first_dropdown").select2({
-                            theme: "classic",
-                            templateResult: formatOption
-                        });
-                    } else {
-                        // Handle the case when no subjects are found
-                        alert("No subjects found");
-                    }
-                },
-                error: function() {
-                    // Handle AJAX error here
-                    alert("An error occurred while fetching subjects.");
+            //     $.ajax({
+            //         url: '<?php echo base_url('index.php/Validation/get_subjects'); ?>',
+            //         method: 'POST',
+            //         dataType: 'json',
+            //        // data: {}
+            //         success: function(data) {
+            //             if (data != 0) {
+            //                 var option = "";
+            //                 // Populate the first dropdown with fetched subjects
+            //                 $.each(data, function(index, subject) {
+            //                     option += `<option value="${subject.id}" data-img="${subject.image}">${subject.id}. ${subject.name}</option>`;
+            //                 });
+            //                 $('#first_dropdown').append(option);
+
+            //                 // Initialize select2 with image support
+            //                 $("#first_dropdown").select2({
+            //                     theme: "classic",
+            //                     templateResult: formatOption,
+            //                 });
+            //             } else {
+            //                 // Handle the case when no subjects are found
+            //                 alert("No subjects found");
+            //             }
+            //         },
+            //         error: function() {
+            //             // Handle AJAX error here
+            //             alert("An error occurred while fetching subjects.");
+            //         }
+            //     });
+
+            //     function formatOption(option) {
+            //         if (!option.id) {
+            //             return option.text;
+            //         }
+
+            //         var $option = $(
+            //             `<span><img src="${$(option.element).data('img')}" class="img-icon"/> ${option.text}</span>`
+            //         );
+
+            //         return $option;
+            //     }
+            $('#first_dropdown').select2({
+                theme: "classic",
+                width: 'resolve',
+                allowClear: true,
+                templateResult: showImage,
+
+                ajax: {
+                    url: '<?php echo base_url('index.php/validation/get_subjects'); ?>',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            search: params.term // Send the user's input as 'search' parameter
+                        };
+                    },
+                    processResults: function(data) {
+                        if (data && data.length > 0) {
+                            return {
+                                results: data.map(function(subject) {
+                                    return {
+                                        id: subject.id,
+                                        text: subject.name,
+                                        image: subject.image
+                                    };
+                                })
+                            };
+                        } else {
+                            return {
+                                results: []
+                            };
+                        }
+                    },
+                    cache: true
                 }
             });
-
-            function formatOption(option) {
+            function showImage(option) {
                 if (!option.id) {
                     return option.text;
                 }
 
+                // Use option.image to extract the image URL
+                var imageUrl = option.image;
+
                 var $option = $(
-                    `<span><img src="${$(option.element).data('img')}" class="img-icon"/> ${option.text}</span>`
+                    `<span><img src="${imageUrl}" class="img-icon" />  ${option.id}. ${option.text}</span>`
                 );
 
                 return $option;
@@ -325,7 +343,7 @@
                 var topic = $("#second_dropdown").val();
                 var sub = $("#first_dropdown").val();
                 var lang = $("#selectLang").val();
-                
+
 
 
                 var hrefa = "getCSV/" + topic + "/" + sub + "/" + lang;
@@ -345,7 +363,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                      
+
                         // if (data != 0) {
                         //     $.each(data, function(index, topic) {
                         //         $("#user_data").append("<tr><td>" + topic.question +
@@ -362,7 +380,10 @@
                         var table = $("#user_data").DataTable({
                             "paging": true,
                             // "pageLength": 1,    
-                            "lengthMenu": [ [1, 2, 3, 4, 10, 25, 50, -1], [1, 2, 3, 4, 10, 25, 50, "All"] ],
+                            "lengthMenu": [
+                                [1, 2, 3, 4, 10, 25, 50, -1],
+                                [1, 2, 3, 4, 10, 25, 50, "All"]
+                            ],
                             "bDestroy": true,
                             // dom: 'Bfrtip ',
                             // buttons: [
