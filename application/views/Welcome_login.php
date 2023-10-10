@@ -18,8 +18,15 @@
     <!-- Include DataTables JavaScript -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
+<style>
+    .pop{
+        display: flex;
+    justify-content: center;
+    }
+    
+</style>
 
-<body>
+<body class="day-mode">
     <h1>Welcome to Admin Page</h1>
     <div class="container box">
         <div class="table-responsive">
@@ -64,9 +71,9 @@
                         </div>
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-footer pop">
                     <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary " >Save changes</button>
                 </div>
                 </form>
             </div>
@@ -189,6 +196,7 @@
                 });
             });
         });
+    
     </script>
 </body>
 
