@@ -18,5 +18,10 @@
 
       
     }
+    
+    // public function updateUser($id){
+       
+    //     echo $data;
+    // }
  }
 ?>

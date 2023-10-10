@@ -29,5 +29,27 @@ class crud_controller extends CI_Controller{
         echo 2;
     }
    }
+   public function updateInfo(){
+    $id=$_POST['id'];
+   // print_r($id);
+    $data=$this->db->get_where('users', ['id'=> $id])->row_array();
+   // print_r($data);die;
+    echo json_encode($data);
+   }
+   public function infoChange(){
+    $id = $_POST['id'];
+    $data = array(
+      'user_name' => $_POST['name'],
+      'email' => $_POST['email']
+    );
+    $this->db->where('id',$id);
+    $update =$this->db->update('users',$data);
+    if($update){
+        echo 1;
+    }
+    else{
+        echo 0;
+    }
+   }
 
 }
