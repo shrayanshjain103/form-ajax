@@ -51,5 +51,6 @@ class crud_controller extends CI_Controller{
         echo 0;
     }
    }
+   
 
 }
