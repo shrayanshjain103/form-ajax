@@ -268,7 +268,7 @@ class Validation extends CI_Controller
         fclose($output);
         exit;
     }
-    public function template(){
-        $this->load->view('template/users-profile');
+    public function addQuestion(){
+       $this->load->view('question');
        }
 }
