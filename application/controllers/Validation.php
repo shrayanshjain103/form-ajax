@@ -150,6 +150,145 @@ class Validation extends CI_Controller
         $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang])->result_array();
         echo json_encode($data);
     }
+    public function questionList(){
+        $requestData = $_REQUEST;
+
+        $columns = array(
+            // datatable column index  => database column name
+            0 => 'title',
+            1 => 'stream',
+            2 => 'category',
+            3 => 'Subject',
+            4 => 'publish',
+            5 => 'is_new',
+            6 => 'is_cloud',
+            7 => 'course_for',
+            8 => 'creation_time',
+            9 => 'last_updated',
+        );
+        $query = "SELECT count(cm.id) as total FROM course_question_bank_master cm";
+        $query = $this->db->query($query);
+        $query = $query->row_array();
+        $totalData = (count($query) > 0) ? $query['total'] : 0;
+        $totalFiltered = $totalData;
+
+
+        $sql = "SELECT cqbm.*, csm.name as sub_name, cbtm.topic as top_name
+          FROM course_question_bank_master as cqbm 
+          LEFT JOIN course_subject_master as csm ON cqbm.subject_id = csm.id
+          LEFT JOIN course_subject_topic_master as cbtm ON cqbm.topic_id = cbtm.id
+          where cqbm.status = 1";
+// $data = $this->db->query($query, array($sub, $top, $lang))->result_array();
+
+
+        // $sql = "SELECT cm.* , mc.text as stream ,cc.name as category , csm.name as subject ,
+        //              DATE_FORMAT(FROM_UNIXTIME(SUBSTR(cm.creation_time,1,10)), '%d-%m-%Y') as creation_time ,
+        //              DATE_FORMAT(FROM_UNIXTIME(SUBSTR(cm.last_updated,1,10)), '%d-%m-%Y') as  last_updated
+        //              FROM course_master as cm
+        //              left join master_category as mc on mc.id = cm.course_main_fk
+        //              left join course_category as cc on cc.id = cm.course_category_fk
+        //              left join course_subject_master as csm on csm.id = cm.subject_id where course_type = 4
+        //              and
+        //              $where ";
+
+        // getting records as per search parameters
+        if (!empty($requestData['columns'][0]['search']['value'])) {
+            $sql .= " AND cqbm.id = '" . $requestData['columns'][0]['search']['value'] . "%' ";
+        }
+        if (!empty($requestData['columns'][1]['search']['value'])) {
+            //salary
+            $sql .= " AND cqbm.question LIKE '" . $requestData['columns'][1]['search']['value'] . "%' ";
+        }
+        if (!empty($requestData['columns'][2]['search']['value'])) {
+            //salary
+            $sql .= " AND cqbm.option_1 LIKE '" . $requestData['columns'][2]['search']['value'] . "%' ";
+        }
+        if (!empty($requestData['columns'][3]['search']['value']) && ($requestData['columns'][3]['search']['value'] != "") ) {
+            //salary
+            $sql .= " AND cqbm.option_2 LIKE '" . $requestData['columns'][3]['search']['value'] . "%' ";
+        }
+        if (!empty($requestData['columns'][4]['search']['value']) && ($requestData['columns'][3]['search']['value'] != "")) {
+            //salary
+            $sql .= " AND cqbm.option_3 = '" . $requestData['columns'][4]['search']['value'] . "%' ";
+        }
+        if (!empty($requestData['columns'][5]['search']['value']) || $requestData['columns'][5]['search']['value'] != "") {
+            //salary
+            $sql .= " AND cqbm.option_4 LIKE '" . $requestData['columns'][5]['search']['value'] . "%' ";
+        }
+        if ($requestData['columns'][6]['search']['value'] != '') {
+            //salary
+            $sql .= " AND cqbm.answer LIKE '" . $requestData['columns'][6]['search']['value'] . "%' ";
+        }
+        if ($requestData['columns'][7]['search']['value'] != '') {
+            //salary
+            $sql .= " AND csm.name LIKE '" . $requestData['columns'][7]['search']['value'] . "%' ";
+        }
+        if ($requestData['columns'][8]['search']['value'] != '') {
+            //salary
+            $sql .= " AND cbtm.topic LIKE '" . $requestData['columns'][8]['search']['value'] . "%' ";
+        }
+        if ($requestData['columns'][9]['search']['value'] != '') {
+            //salary
+            $sql .= " AND cqbm.lang_code = '" . $requestData['columns'][9]['search']['value'] . "%' ";
+        }
+        
+
+        $query = $this->db->query($sql)->result();
+       // print_r($this->db->last_query());
+
+        $totalFiltered = count($query); // when there is a search parameter then we have to modify total number filtered rows as per search result.
+
+        $sql .= " ORDER BY id desc LIMIT " . $requestData['start'] . " ," . $requestData['length'] . "   "; // adding length
+
+        $result = $this->db->query($sql)->result();
+         // echo $this->db->last_query();
+         // die;
+        $data = array();
+        foreach ($result as $r) {
+            // preparing an array
+            //print_r($r);die;
+            $nestedData = array();
+            
+            $nestedData[] =  $r->id ;
+            $nestedData[] =  $r->sub_name ;
+
+            $nestedData[] =  $r->top_name ;
+
+            $nestedData[] = $r->lang_code ==1 ? 'English' : 'Hindi' ;
+
+            $nestedData[] = $r->question;
+            //$nestedData[] = $r->category;
+            $nestedData[] = $r->option_1;
+            $nestedData[] = $r->option_2;
+            //$nestedData[] = ($r->publish == 1 )?'<span class="badge ">Published</span>':"--";
+            //$nestedData[] = $r->opt2;
+           
+            $nestedData[] = $r->option_3;
+
+           $nestedData[] =  $r->option_4;
+            
+            $nestedData [] = $r->answer;
+           
+            // $nestedData[] = $r->last_updated;
+           
+                $action = "<a class='btn-xs bold  btn btn-info' href=''>Edit</a> <a class='btn-xs bold  btn btn-warning' href=''>Delete</a>";
+            
+
+            $nestedData[] = $action;
+
+            $data[] = $nestedData;
+        }
+        
+
+        $json_data = array(
+            "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+            "recordsTotal" => intval($totalData), // total number of records
+            "recordsFiltered" => intval($totalFiltered), // total number of records after searching, if there is no searching then totalFiltered = totalData
+            "data" => $data, // total data array
+        );
+
+        echo json_encode($json_data);
+    }
 
 
     // Function to download the CSV file
@@ -269,6 +408,6 @@ class Validation extends CI_Controller
         exit;
     }
     public function addQuestion(){
-       $this->load->view('question');
+       $this->load->view('question.php');
        }
 }

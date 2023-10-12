@@ -344,9 +344,6 @@
                 var topic = $("#second_dropdown").val();
                 var sub = $("#first_dropdown").val();
                 var lang = $("#selectLang").val();
-
-
-
                 var hrefa = "getCSV/" + topic + "/" + sub + "/" + lang;
                 $('#download').attr('href', hrefa);
                 $("#download").prop('disable', false);
@@ -364,17 +361,6 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-
-                        // if (data != 0) {
-                        //     $.each(data, function(index, topic) {
-                        //         $("#user_data").append("<tr><td>" + topic.question +
-                        //             "</td></tr>");
-                        //     });
-
-                        // } else {
-                        //     console.log(null);
-                        // }
-
                         if (data.length == 0) {
                             data = [];
                         }
@@ -386,10 +372,6 @@
                                 [1, 2, 3, 4, 10, 25, 50]
                             ],
                             "bDestroy": true,
-                            // dom: 'Bfrtip ',
-                            // buttons: [
-                            //     'copy', 'csv', 'excel', 'print'
-                            // ],
                             data: data,
                             columns: [{
                                     data: 'question',
@@ -429,15 +411,6 @@
 
 
         });
-        // $("#download").click(function(e) {
-        //     e.preventDefault();
-        //     var topic = $("#second_dropdown").val();
-        //     var sub = $("#first_dropdown").val();
-        //      var hrefa = "getQuestion/"+topic+"/"+sub;
-        //      $('#download').attr('href' , hrefa);
-        //      $("#download").prop('disable' , false);
-
-        // });
     </script>
 </body>
 
