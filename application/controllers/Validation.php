@@ -409,7 +409,7 @@ class Validation extends CI_Controller
             $this->form_validation->set_rules('option4', 'option4', 'required');
             $this->form_validation->set_rules('Answer', 'Answer', 'required');
             $this->form_validation->set_rules('Description', 'Description', 'required');
-            $this->form_validation->set_rules('Status', 'Status', 'required');
+            $this->form_validation->set_rules('status', 'status', 'required');
 
             if ($this->form_validation->run() == false) {
                 echo 0;
@@ -425,7 +425,7 @@ class Validation extends CI_Controller
                     'option_4' => $this->input->post('option4'),
                     'answer' => $this->input->post('Answer'),
                     'description' => $this->input->post('Description'),
-                    'status' => $this->input->post('Status'),
+                    'status' => $this->input->post('status'),
 
                 );
                 if ($this->db->insert('course_question_bank_master', $data)) {

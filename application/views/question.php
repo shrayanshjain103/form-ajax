@@ -112,7 +112,7 @@
 <main id="main" class="main">
     <br>
     <br>
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade " id="myModal" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -191,11 +191,15 @@
                         </div>
                         <br>
                         <br>
-                        <div class="container">
+                        <!-- <div class="container">
                             <label for="Status">Status: </label>
                             <input type="text" id="Status" name="Status"></input>
-                        </div>
-                        <br>
+                        </div> -->
+                        <select id="status" name="status">
+                            <option>Select Status</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
                 </div>
 
                 <div class="modal-footer pop">
@@ -381,7 +385,9 @@
                 success: function(res) {
                     console.log(res);
                     if (res == 1) {
-                        $('#myModal').hide();
+                        $('.modal').hide();
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove(); 
                         $('#user_data').DataTable().ajax.reload();
                         // window.location.reload();
                         alert("Data inserted Successfully");
