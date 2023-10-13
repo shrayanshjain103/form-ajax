@@ -179,7 +179,7 @@ class Validation extends CI_Controller
           FROM course_question_bank_master as cqbm 
           LEFT JOIN course_subject_master as csm ON cqbm.subject_id = csm.id
           LEFT JOIN course_subject_topic_master as cbtm ON cqbm.topic_id = cbtm.id
-          where cqbm.status = 1";
+          where cqbm.status = 1 OR cqbm.status = 0";
         // getting records as per search parameters
         if (!empty($requestData['columns'][0]['search']['value'])) {
             $sql .= " AND cqbm.id = '" . $requestData['columns'][0]['search']['value'] . "%' ";
@@ -264,11 +264,11 @@ class Validation extends CI_Controller
             // $nestedData[] = $r->last_updated;
 
             $action = "<a class='btn-xs bold  btn btn-info' href='<?= base_url()?>index.php/validation/editQuestion/" . $r->id . "'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
-
-
             $nestedData[] = $action;
-            $nestedData[] = $r->status == 1 ? 'Active' : 'Inactive';
-
+            $sts=  $r->status == 1? 'Active' : 'Inactive';
+            $status="<a class='btn-xs bold  btn btn-info'  href='editStatus/" . $r->id . "/".$r->status." '> $sts</a>";
+            $nestedData[] = $status;
+            
             $data[] = $nestedData;
         }
 
@@ -397,6 +397,7 @@ class Validation extends CI_Controller
     // it will edit the question of the table
     public function editQuestion()
     {
+
     }
     
     //will add new questions in the table
@@ -438,6 +439,17 @@ class Validation extends CI_Controller
                     echo 0;
                 }
             }
+        }
+    }
+    public function editStatus($id,$stat){
+        $updatestat = $stat == 1? 0 : 1;
+        $this->db->where('id', $id);
+        $this->db->set('status',$updatestat);
+        $data=$this->db->update('course_question_bank_master');
+        if($data){
+            redirect('http://localhost/form-ajax/index.php/validation/addQuestion');
+        }else{
+            redirect('http://localhost/form-ajax/index.php/validation/addQuestion');
         }
     }
 }
