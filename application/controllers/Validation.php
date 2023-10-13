@@ -9,6 +9,7 @@ class Validation extends CI_Controller
             $this->load->model('register_model');
             $this->load->helper('url');
             $this->load->helper('form');
+            $this->load->helper('custom');
             $this->load->library('form_validation');
             $this->load->library('session');
             //$this->load->model('getQuestionBank');
@@ -99,7 +100,7 @@ class Validation extends CI_Controller
         if (!empty($searchTerm)) {
             $this->db->group_start();
             if (is_numeric($searchTerm)) {
-                $this->db->like('id', $searchTerm,'after');
+                $this->db->like('id', $searchTerm, 'after');
             } else {
                 $this->db->like('name', $searchTerm, 'after');
             }
@@ -150,7 +151,8 @@ class Validation extends CI_Controller
         $data = $this->db->get_where('course_question_bank_master', ['subject_id' => $sub, 'topic_id' => $top, 'lang_code' => $lang])->result_array();
         echo json_encode($data);
     }
-    public function questionList(){
+    public function questionList()
+    {
         $requestData = $_REQUEST;
 
         $columns = array(
@@ -178,19 +180,6 @@ class Validation extends CI_Controller
           LEFT JOIN course_subject_master as csm ON cqbm.subject_id = csm.id
           LEFT JOIN course_subject_topic_master as cbtm ON cqbm.topic_id = cbtm.id
           where cqbm.status = 1";
-// $data = $this->db->query($query, array($sub, $top, $lang))->result_array();
-
-
-        // $sql = "SELECT cm.* , mc.text as stream ,cc.name as category , csm.name as subject ,
-        //              DATE_FORMAT(FROM_UNIXTIME(SUBSTR(cm.creation_time,1,10)), '%d-%m-%Y') as creation_time ,
-        //              DATE_FORMAT(FROM_UNIXTIME(SUBSTR(cm.last_updated,1,10)), '%d-%m-%Y') as  last_updated
-        //              FROM course_master as cm
-        //              left join master_category as mc on mc.id = cm.course_main_fk
-        //              left join course_category as cc on cc.id = cm.course_category_fk
-        //              left join course_subject_master as csm on csm.id = cm.subject_id where course_type = 4
-        //              and
-        //              $where ";
-
         // getting records as per search parameters
         if (!empty($requestData['columns'][0]['search']['value'])) {
             $sql .= " AND cqbm.id = '" . $requestData['columns'][0]['search']['value'] . "%' ";
@@ -203,7 +192,7 @@ class Validation extends CI_Controller
             //salary
             $sql .= " AND cqbm.option_1 LIKE '" . $requestData['columns'][2]['search']['value'] . "%' ";
         }
-        if (!empty($requestData['columns'][3]['search']['value']) && ($requestData['columns'][3]['search']['value'] != "") ) {
+        if (!empty($requestData['columns'][3]['search']['value']) && ($requestData['columns'][3]['search']['value'] != "")) {
             //salary
             $sql .= " AND cqbm.option_2 LIKE '" . $requestData['columns'][3]['search']['value'] . "%' ";
         }
@@ -231,30 +220,30 @@ class Validation extends CI_Controller
             //salary
             $sql .= " AND cqbm.lang_code = '" . $requestData['columns'][9]['search']['value'] . "%' ";
         }
-        
+
 
         $query = $this->db->query($sql)->result();
-       // print_r($this->db->last_query());
+        // print_r($this->db->last_query());
 
         $totalFiltered = count($query); // when there is a search parameter then we have to modify total number filtered rows as per search result.
 
         $sql .= " ORDER BY id desc LIMIT " . $requestData['start'] . " ," . $requestData['length'] . "   "; // adding length
 
         $result = $this->db->query($sql)->result();
-         // echo $this->db->last_query();
-         // die;
+        // echo $this->db->last_query();
+        // die;
         $data = array();
         foreach ($result as $r) {
             // preparing an array
             //print_r($r);die;
             $nestedData = array();
-            
-            $nestedData[] =  $r->id ;
-            $nestedData[] =  $r->sub_name ;
 
-            $nestedData[] =  $r->top_name ;
+            $nestedData[] =  $r->id;
+            $nestedData[] =  $r->sub_name;
 
-            $nestedData[] = $r->lang_code ==1 ? 'English' : 'Hindi' ;
+            $nestedData[] =  $r->top_name;
+
+            $nestedData[] = $r->lang_code == 1 ? 'English' : 'Hindi';
 
             $nestedData[] = $r->question;
             //$nestedData[] = $r->category;
@@ -262,23 +251,23 @@ class Validation extends CI_Controller
             $nestedData[] = $r->option_2;
             //$nestedData[] = ($r->publish == 1 )?'<span class="badge ">Published</span>':"--";
             //$nestedData[] = $r->opt2;
-           
+
             $nestedData[] = $r->option_3;
 
-           $nestedData[] =  $r->option_4;
-            
-            $nestedData [] = $r->answer;
-           
+            $nestedData[] =  $r->option_4;
+
+            $nestedData[] = $r->answer;
+
             // $nestedData[] = $r->last_updated;
-           
-                $action = "<a class='btn-xs bold  btn btn-info' href=''>Edit</a> <a class='btn-xs bold  btn btn-warning' href=''>Delete</a>";
-            
+
+            $action = "<a class='btn-xs bold  btn btn-info' href='<?= base_url()?>index.php/validation/editQuestion/" . $r->id . "'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
+
 
             $nestedData[] = $action;
 
             $data[] = $nestedData;
         }
-        
+
 
         $json_data = array(
             "draw" => intval($requestData['draw']), // for every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
@@ -367,31 +356,6 @@ class Validation extends CI_Controller
         // put the data in csv file in proper format means hindi ko hindi or english me rakhega 
         fputs($output, "\xEF\xBB\xBF");
 
-        // Output the CSV column headers
-        //    $header=array('Question', 'Option_1', 'Option_2', 'Option_3', 'Option_4', 'Answer');
-        //    $headerString=implode(',',);
-
-        //    fputs($output,'$headerString');
-
-        // Output each row of data
-        // foreach ($usersData as $row) {
-        //     fputcsv($output, $row);
-        // }
-
-
-        // foreach ($usersData as $line) {
-        //     // print_r($line);die;
-        //                 $nestedDataCSV = array();
-        //                 $nestedDataCSV[] = 'Question :-'.strip_tags($line['question']);
-        //                 $nestedDataCSV[] = 'Option1 :-'.strip_tags($line['option_1']);
-        //                 $nestedDataCSV[] = 'Option2 :-'.strip_tags($line['option_2']);
-        //                 $nestedDataCSV[] = 'Option3 :-'.strip_tags($line['option_3']);
-        //                 $nestedDataCSV[] = 'Option4 :-'.strip_tags($line['option_4']);
-        //                 $nestedDataCSV[] = 'Answer :-'.strip_tags($line['answer']);
-
-        //                 fputcsv($output, $nestedDataCSV);
-        //    }
-
         foreach ($usersData as $line) {
             $content = 'Question: ' . preg_replace('/[,"]+/', '', strip_tags($line['question'])) . PHP_EOL;
             $content .= 'Option_1: ' . preg_replace('/[,"]+/', '', strip_tags($line['option_1']));
@@ -407,7 +371,69 @@ class Validation extends CI_Controller
         fclose($output);
         exit;
     }
-    public function addQuestion(){
-       $this->load->view('question.php');
-       }
+    public function addQuestion()
+    {
+        $this->load->view('question.php');
+    }
+
+    // it will delete the question from table
+    public function deleteQuestion($id)
+    {
+        $this->db->where('id', $id);
+        $data = $this->db->delete("course_question_bank_master");
+        if ($data) {
+            $this->session->set_flashdata('Success', 'Question deletedd Sucessfully');
+            redirect("validation/addQuestion");
+        } else {
+            $this->session->set_flashdata('error', 'Question Can not be Deleted');
+            redirect("validation/addQuestion");
+        }
+    }
+
+    // it will edit the question of the table
+    public function editQuestion()
+    {
+    }
+    
+    //will add new questions in the table
+    public function addnewQuestion()
+    {
+        if ($this->input->post()) {
+            $this->form_validation->set_rules('subject_id', 'subject_id', 'required');
+            $this->form_validation->set_rules('topic_id', 'topic_id', 'required');
+            $this->form_validation->set_rules('lang_code', 'lang_code', 'required');
+            $this->form_validation->set_rules('Question', 'Question', 'required');
+            $this->form_validation->set_rules('option1', 'option1', 'required');
+            $this->form_validation->set_rules('option2', 'option2', 'required');
+            $this->form_validation->set_rules('option3', 'option3', 'required');
+            $this->form_validation->set_rules('option4', 'option4', 'required');
+            $this->form_validation->set_rules('Answer', 'Answer', 'required');
+            $this->form_validation->set_rules('Description', 'Description', 'required');
+            $this->form_validation->set_rules('Status', 'Status', 'required');
+
+            if ($this->form_validation->run() == false) {
+                echo 0;
+            } else {
+                $data = array(
+                    'subject_id' => $this->input->post('subject_id'),
+                    'topic_id' => $this->input->post('topic_id'),
+                    'lang_code' => $this->input->post('lang_code'),
+                    'question' => $this->input->post('Question'),
+                    'option_1' => $this->input->post('option1'),
+                    'option_2' => $this->input->post('option2'),
+                    'option_3' => $this->input->post('option3'),
+                    'option_4' => $this->input->post('option4'),
+                    'answer' => $this->input->post('Answer'),
+                    'description' => $this->input->post('Description'),
+                    'status' => $this->input->post('Status'),
+
+                );
+                if ($this->db->insert('course_question_bank_master', $data)) {
+                    echo 1;
+                } else {
+                    echo 0;
+                }
+            }
+        }
+    }
 }

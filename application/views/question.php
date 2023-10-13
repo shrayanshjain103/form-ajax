@@ -116,14 +116,45 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-
+                    <selection class="modal-title" id="exampleModalLabel">Add New Question</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">Add New Question</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="save" action="">
+                    <form id="save" action="" method="post">
+                        <label for="first_dropdown">Select Subject:</label>
+                        <br>
+                        <br>
+                        <select id="first_dropdown" name="subject_id">
+                            <option value="">Please Select Subject</option>
+                        </select>
+                        <br>
+                        <br>
+                        <label for="second_dropdown">Select Topics:</label>
+                        <br>
+                        <br>
+                        <select id="second_dropdown" name="topic_id">
+                            <option value="">Please Select Topic</option>
+                        </select>
+                        <br>
+                        <br>
+                        <label for="lang_code">Select Language:</label>
+                        <br>
+                        <br>
+                        <select id="lang_code" name="lang_code">
+                            <option value="">Please Select Language</option>
+                            <option value="1">English</option>
+                            <option value="2">Hindi</option>
+                        </select>
+                        <br>
+                        <br>
                         <div class="container">
                             <label for="Question">Question: </label>
                             <input type="text" id="Question" name="Question"></input>
@@ -159,11 +190,12 @@
                             <input type="text" id="Description" name="Description"></input>
                         </div>
                         <br>
+                        <br>
                         <div class="container">
-                            <label for="langugage_code">LanguageID: </label>
-                            <input type="text" id="langugage_code" name="langugage_code"></input>
+                            <label for="Status">Status: </label>
+                            <input type="text" id="Status" name="Status"></input>
                         </div>
-
+                        <br>
                 </div>
 
                 <div class="modal-footer pop">
@@ -180,7 +212,7 @@
 
 
     <table class="display table table-bordered table-striped" id="user_data">
-        <a href="javascript:void(0)"><button type="button"  class="btn btn-secondary" data-toggle="modal" data-target="#myModal">Add Question</button></a>
+        <a href="javascript:void(0)"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">Add Question</button></a>
         <thead>
             <tr>
                 <th>#</th>
@@ -335,6 +367,36 @@
         });
         $("#second_dropdown").select2({
             theme: "classic"
+        });
+    });
+    $(document).ready(function() {
+        $("#save").submit(function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>index.php/validation/addnewQuestion",
+                dataType: "json",
+                data: formData,
+                success: function(res) {
+                    console.log(res);
+                    if (res == 1) {
+                        $('#myModal').hide();
+                        $('#user_data').DataTable().ajax.reload();
+                        // window.location.reload();
+                        alert("Data inserted Successfully");
+
+
+                    } else {
+                        $('#myModal').hide();
+                        // window.location.reload();
+                        $('#user_data').DataTable().ajax.reload();
+                        alert("Data inserted Unsuccessful");
+
+                    }
+                }
+
+            });
         });
     });
 </script>
