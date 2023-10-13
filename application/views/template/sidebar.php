@@ -56,7 +56,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <i class="bi bi-list toggle-sidebar-btn"></i>
-            <a href="dashboard" class="logo d-flex align-items-center" style="margin-left: 10px;">
+            <a href="http://localhost/form-ajax/index.php/validation/dashboard" class="logo d-flex align-items-center" style="margin-left: 10px;">
                 <img src="<?= base_url("http://localhost/form-ajax/index.php/validation/dashboard") ?>assets/img/logo.png" alt="">
                 <span class="d-none d-lg-block">Welcome Admin </span>
             </a>
@@ -114,7 +114,7 @@
         <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
-                <a class="nav-link " href="dashboard">
+                <a class="nav-link " href="http://localhost/form-ajax/index.php/validation/dashboard">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>

@@ -209,10 +209,31 @@
                 </form>
             </div>
         </div>
-
+    </div>
+    <div class="modal fade" id="editModal" role="dialog">
+    
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">Edit Question</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your form elements for editing here -->
+                    <form id="editForm" action="" method="post">
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEdit">Save Changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    </div>
 
 
     <table class="display table table-bordered table-striped" id="user_data">
@@ -389,7 +410,7 @@
                     if (res == 1) {
                         $('.modal').hide();
                         $('body').removeClass('modal-open');
-                        $('.modal-backdrop').remove(); 
+                        $('.modal-backdrop').remove();
                         $('#user_data').DataTable().ajax.reload();
                         // window.location.reload();
                         alert("Data inserted Successfully");

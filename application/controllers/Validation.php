@@ -262,8 +262,8 @@ class Validation extends CI_Controller
             $nestedData[] = $r->answer;
 
             // $nestedData[] = $r->last_updated;
-
-            $action = "<a class='btn-xs bold  btn btn-info' href='<?= base_url()?>index.php/validation/editQuestion/" . $r->id . "'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
+            // <a href="javascript:void(0)"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">Add Question</button></a>
+            $action = "<a class='btn-xs bold  btn btn-info' id='editModal' data-toggle='modal' data-target='#editModal' href='<?= base_url()?>editQuestion/" . $r->id . "'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
             $nestedData[] = $action;
             $sts=  $r->status == 1? 'Active' : 'Inactive';
             $status="<a class='btn-xs bold  btn btn-info'  href='editStatus/" . $r->id . "/".$r->status." '> $sts</a>";
