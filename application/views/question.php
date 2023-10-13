@@ -230,6 +230,7 @@
                 <th>Option 4</th>
                 <th>Answer</th>
                 <th>Action</th>
+                <th>Status</th>
             </tr>
         </thead>
         <thead>
@@ -238,6 +239,7 @@
                 <th><input type="text" data-column="7" class="search-input-text form-control"></th>
                 <th><input type="text" data-column="8" class="search-input-text form-control"></th>
                 <th><input type="text" data-column="9" class="search-input-text form-control"></th>
+                <th><input type="text" data-column="10" class="search-input-text form-control"></th>
                 <th></th>
                 <th></th>
                 <th></th>

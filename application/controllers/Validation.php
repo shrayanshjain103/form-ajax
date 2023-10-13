@@ -220,6 +220,10 @@ class Validation extends CI_Controller
             //salary
             $sql .= " AND cqbm.lang_code = '" . $requestData['columns'][9]['search']['value'] . "%' ";
         }
+        if ($requestData['columns'][10]['search']['value'] != '') {
+            //salary
+            $sql .= " AND cqbm.status = '" . $requestData['columns'][10]['search']['value'] . "%' ";
+        }
 
 
         $query = $this->db->query($sql)->result();
@@ -244,7 +248,6 @@ class Validation extends CI_Controller
             $nestedData[] =  $r->top_name;
 
             $nestedData[] = $r->lang_code == 1 ? 'English' : 'Hindi';
-
             $nestedData[] = $r->question;
             //$nestedData[] = $r->category;
             $nestedData[] = $r->option_1;
@@ -264,6 +267,7 @@ class Validation extends CI_Controller
 
 
             $nestedData[] = $action;
+            $nestedData[] = $r->status == 1 ? 'Active' : 'Inactive';
 
             $data[] = $nestedData;
         }
