@@ -56,7 +56,7 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <i class="bi bi-list toggle-sidebar-btn"></i>
-            <a href="index.html" class="logo d-flex align-items-center" style="margin-left: 10px;">
+            <a href="dashboard" class="logo d-flex align-items-center" style="margin-left: 10px;">
                 <img src="<?= base_url("http://localhost/form-ajax/index.php/validation/dashboard") ?>assets/img/logo.png" alt="">
                 <span class="d-none d-lg-block">Welcome Admin </span>
             </a>
@@ -129,22 +129,7 @@
                 <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="addQuestion">
-                            <i class="bi bi-circle"></i><span>Form Elements</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-layouts.html">
-                            <i class="bi bi-circle"></i><span>Form Layouts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-editors.html">
-                            <i class="bi bi-circle"></i><span>Form Editors</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="forms-validation.html">
-                            <i class="bi bi-circle"></i><span>Form Validation</span>
+                            <i class="bi bi-circle"></i><span>Question Section</span>
                         </a>
                     </li>
                 </ul>
