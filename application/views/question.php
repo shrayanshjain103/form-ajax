@@ -272,7 +272,7 @@
 
 
     <table class="display table table-bordered table-striped" id="user_data">
-        <a href="javascript:void(0)"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">Add Question</button></a>
+        <a href="javascript:void(0)"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#newModal">Add Question</button></a>
         <thead>
             <tr>
                 <th>#</th>
@@ -310,25 +310,7 @@
     </div>
 </main>
 
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body">
-                <p>Some text in the modal.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 <script>
     $(document).ready(function() {
@@ -512,7 +494,38 @@
         });
 
     };
+    $(document).ready(function() {
+        $("#newModal").on(click,function(event) {
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>index.php/validation/addnewQuestion",
+                dataType: "json",
+                data: formData,
+                success: function(res) {
+                    console.log(res);
+                    if (res == 1) {
+                        $('.modal').hide();
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#user_data').DataTable().ajax.reload();
+                        // window.location.reload();
+                        alert("Data inserted Successfully");
 
+
+                    } else {
+                        $('#myModal').hide();
+                        // window.location.reload();
+                        $('#user_data').DataTable().ajax.reload();
+                        alert("Data inserted Unsuccessful");
+
+                    }
+                }
+
+            });
+        });
+    });
     $(document).ready(function() {
         $("#saveEdit").on('click', function() {
             var question = $("#editQuestion").val();
