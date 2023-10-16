@@ -395,8 +395,9 @@ class Validation extends CI_Controller
     }
 
     // it will edit the question of the table
-    public function editQuestion()
+    public function editQuestion($id)
     {
+        print_r($id);die;
 
     }
     

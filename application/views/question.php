@@ -223,7 +223,58 @@
                 <div class="modal-body">
                     <!-- Add your form elements for editing here -->
                     <form id="editForm" action="" method="post">
-                        
+                        <div>
+                            <label for="id">Edit the ID: </label>
+                            <input type="text" id="id" name="id"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>   
+                            <label for="Subject">Edit the Subject: </label>
+                            <input type="text" id="Subject" name="Subject"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="id">Edit the Topic: </label>
+                            <input type="text" id="id" name="id"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="Question">Edit the Question: </label>
+                            <input type="text" id="Question" name="Question"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="option1">Edit the Option 1: </label>
+                            <input type="text" id="option1" name="option1"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="option2">Edit the Option 2: </label>
+                            <input type="text" id="option2" name="option2"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="option3">Edit the Option 3: </label>
+                            <input type="text" id="option3" name="option3"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="option4">Edit the Option 4: </label>
+                            <input type="text" id="option4" name="option4"/>
+                        </div>
+                        <br>
+                        <br>
+                        <div>
+                            <label for="Answer">Edit the Answer: </label>
+                            <input type="text" id="Answer" name="Answer"/>
+                        </div>                          
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -428,6 +479,28 @@
             });
         });
     });
+    //     function modalopen(id) {
+    //     $('#editForm').show();
+    //     $.ajax({
+    //         url: '<?php echo base_url('index.php/crud_controller/updateInfo'); ?>',
+    //         method: 'POST',
+    //         data: {
+    //             id: id
+    //         },
+    //         dataType: 'json',
+    //         success: function(data) {
+    //             //console.log(data);
+    //             $('#name').val(data.);
+    //             $('#email').val(data.email);
+    //             $('#id').val(data.id);
+
+    //         },
+    //         error: function() {
+    //             // Handle AJAX error here
+    //             alert("An error occurred while fetching topics.");
+    //         }
+    //     });
+    // };
 </script>
 
 
