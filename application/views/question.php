@@ -112,7 +112,7 @@
 <main id="main" class="main">
     <br>
     <br>
-    <div class="modal fade " id="myModal" role="dialog">
+    <div class="modal fade " id="newModal" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -210,8 +210,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="editModal" role="dialog">
-    
+    <div class="modal" id="editModal" role="dialog">
+
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -223,58 +223,42 @@
                 <div class="modal-body">
                     <!-- Add your form elements for editing here -->
                     <form id="editForm" action="" method="post">
-                        <div>
-                            <label for="id">Edit the ID: </label>
-                            <input type="text" id="id" name="id"/>
-                        </div>
-                        <br>
-                        <br>
-                        <div>   
-                            <label for="Subject">Edit the Subject: </label>
-                            <input type="text" id="Subject" name="Subject"/>
-                        </div>
-                        <br>
-                        <br>
-                        <div>
-                            <label for="id">Edit the Topic: </label>
-                            <input type="text" id="id" name="id"/>
-                        </div>
-                        <br>
                         <br>
                         <div>
                             <label for="Question">Edit the Question: </label>
-                            <input type="text" id="Question" name="Question"/>
+                            <input type="text" id="editQuestion" name="Question" val="" />
+                            <input type="hidden" id="question_id" val="">
                         </div>
                         <br>
                         <br>
                         <div>
                             <label for="option1">Edit the Option 1: </label>
-                            <input type="text" id="option1" name="option1"/>
+                            <input type="text" id="editoption1" name="option1" />
                         </div>
                         <br>
                         <br>
                         <div>
                             <label for="option2">Edit the Option 2: </label>
-                            <input type="text" id="option2" name="option2"/>
+                            <input type="text" id="editoption2" name="option2" />
                         </div>
                         <br>
                         <br>
                         <div>
                             <label for="option3">Edit the Option 3: </label>
-                            <input type="text" id="option3" name="option3"/>
+                            <input type="text" id="editoption3" name="option3" />
                         </div>
                         <br>
                         <br>
                         <div>
                             <label for="option4">Edit the Option 4: </label>
-                            <input type="text" id="option4" name="option4"/>
+                            <input type="text" id="editoption4" name="option4" />
                         </div>
                         <br>
                         <br>
                         <div>
                             <label for="Answer">Edit the Answer: </label>
-                            <input type="text" id="Answer" name="Answer"/>
-                        </div>                          
+                            <input type="text" id="editanswer" name="Answer" />
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -325,6 +309,27 @@
 
     </div>
 </main>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
 
@@ -479,28 +484,71 @@
             });
         });
     });
-    //     function modalopen(id) {
-    //     $('#editForm').show();
-    //     $.ajax({
-    //         url: '<?php echo base_url('index.php/crud_controller/updateInfo'); ?>',
-    //         method: 'POST',
-    //         data: {
-    //             id: id
-    //         },
-    //         dataType: 'json',
-    //         success: function(data) {
-    //             //console.log(data);
-    //             $('#name').val(data.);
-    //             $('#email').val(data.email);
-    //             $('#id').val(data.id);
+</script>
+<script>
+    function editmodel(id) {
+        // alert('sdv');
+        $('#editModal').show();
+        $.ajax({
+            url: "<?php echo base_url('index.php/validation/editQuestion/'); ?>" + id,
+            method: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            success: function(data) {
+                $('#editQuestion').val(data.question);
+                $('#editoption1').val(data.option_1);
+                $('#editoption2').val(data.option_2);
+                $('#editoption3').val(data.option_3);
+                $('#editoption4').val(data.option_4);
+                $('#editanswer').val(data.answer);
+                $('#question_id').val(id);
 
-    //         },
-    //         error: function() {
-    //             // Handle AJAX error here
-    //             alert("An error occurred while fetching topics.");
-    //         }
-    //     });
-    // };
+            },
+            error: function() {
+                alert("An error occurred while fetching topics.");
+            }
+        });
+
+    };
+
+    $(document).ready(function() {
+        $("#saveEdit").on('click', function() {
+            var question = $("#editQuestion").val();
+            var option1 = $('#editoption1').val();
+            var option2 = $('#editoption2').val();
+            var option3 = $('#editoption3').val();
+            var option4 = $('#editoption4').val();
+            var answer = $('#editanswer').val();
+            var id = $('#question_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url(); ?>index.php/validation/editform/"+id,
+                dataType: "json",
+                data: {
+                    question:  question,
+                    option_1: option1,
+                    option_2: option2,
+                    option_3: option3,
+                    option_4: option4,
+                    answer: answer
+                },
+                success: function(res) {
+                    if (res == 1) {
+                        $('#editModal').hide();  
+                        alert('Data Updation succesfully');
+                        $('#user_data').DataTable().ajax.reload();
+                    } else {
+                        $('#editModal').hide();
+                        alert('Data Updation Unsuccesful');
+                        $('#user_data').DataTable().ajax.reload();
+                    }
+                }
+
+            });
+        });
+    });
 </script>
 
 

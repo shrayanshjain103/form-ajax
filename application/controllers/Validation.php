@@ -263,12 +263,12 @@ class Validation extends CI_Controller
 
             // $nestedData[] = $r->last_updated;
             // <a href="javascript:void(0)"><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#myModal">Add Question</button></a>
-            $action = "<a class='btn-xs bold  btn btn-info' id='editModal' data-toggle='modal' data-target='#editModal' href='<?= base_url()?>editQuestion/" . $r->id . "'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
+            $action = "<a class='btn-xs bold  btn btn-info' onclick='editmodel(" . $r->id . ")'>Edit</a> <a class='btn-xs bold  btn btn-warning' href='deleteQuestion/" . $r->id . "'>Delete</a>";
             $nestedData[] = $action;
-            $sts=  $r->status == 1? 'Active' : 'Inactive';
-            $status="<a class='btn-xs bold  btn btn-info'  href='editStatus/" . $r->id . "/".$r->status." '> $sts</a>";
+            $sts =  $r->status == 1 ? 'Active' : 'Inactive';
+            $status = "<a class='btn-xs bold  btn btn-info'  href='editStatus/" . $r->id . "/" . $r->status . " '> $sts</a>";
             $nestedData[] = $status;
-            
+
             $data[] = $nestedData;
         }
 
@@ -397,10 +397,11 @@ class Validation extends CI_Controller
     // it will edit the question of the table
     public function editQuestion($id)
     {
-        print_r($id);die;
-
+        // $this->db->get('question, option_1, option_2, option_3, option_4, answer');
+        $data = $this->db->get_where('course_question_bank_master', ['id' => $id])->row_array();
+        echo json_encode($data);
     }
-    
+
     //will add new questions in the table
     public function addnewQuestion()
     {
@@ -442,15 +443,44 @@ class Validation extends CI_Controller
             }
         }
     }
-    public function editStatus($id,$stat){
-        $updatestat = $stat == 1? 0 : 1;
+    public function editStatus($id, $stat)
+    {
+        $updatestat = $stat == 1 ? 0 : 1;
         $this->db->where('id', $id);
-        $this->db->set('status',$updatestat);
-        $data=$this->db->update('course_question_bank_master');
-        if($data){
+        $this->db->set('status', $updatestat);
+        $data = $this->db->update('course_question_bank_master');
+        if ($data) {
             redirect('http://localhost/form-ajax/index.php/validation/addQuestion');
-        }else{
+        } else {
             redirect('http://localhost/form-ajax/index.php/validation/addQuestion');
         }
     }
+    public function editform($id)
+    {
+        // print_r($id);die;
+        $data = array(
+            'question' => $this->input->post('question'),
+            'option_1' => $this->input->post('option_1'),
+            'option_2' => $this->input->post('option_2'),
+            'option_3' => $this->input->post('option_3'),
+            'option_4' => $this->input->post('option_4'),
+            'answer' => $this->input->post('answer')
+        );
+        $this->db->where('id', $id);
+        $update = $this->db->update('course_question_bank_master', $data);
+        if ($update) {
+            echo 1;
+        } else {
+            //echo 0;
+            echo 'Update Error: ' . print_r($this->db->error(), true);
+        }
+    }
 }
+// $this->db->where('id', $id);
+//         $update = $this->db->update('course_question_bank_master', $data);
+//         if ($update) {
+//             echo 1;
+//         } else {
+//             //echo 0;
+//             echo 'Update Error: ' . print_r($this->db->error(), true);
+//         }
