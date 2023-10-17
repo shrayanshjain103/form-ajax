@@ -108,6 +108,9 @@
             <input type="submit" id="login" class="button">
             <!-- <button type="button" class="button">Sign Up</button> -->
             <a href="<?=base_url()?>index.php/Validation/process_registration" class="button" style="text-decoration:none">Sign Up</a>
+            <br>
+            <br>
+            <a href="<?=base_url()?>index.php/Validation/resetPassword" class="button" style="text-decoration:none">Forget Password</a>
             <div id="msg"></div>
         </form>
     </div>

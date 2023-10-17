@@ -13,7 +13,7 @@
     }
     public function checkLogin($email, $password){
       $query=$this->db->get_where("users",array('email'=>$email,'password'=>$password));
-      if($query->num_rows()>0){
+      if($query->num_rows()>0 ){
         return true;
       }else{
          return false;

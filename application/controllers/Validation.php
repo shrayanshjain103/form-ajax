@@ -475,12 +475,8 @@ class Validation extends CI_Controller
             echo 'Update Error: ' . print_r($this->db->error(), true);
         }
     }
+    // reset password funtion
+    public function resetPassword(){
+        $this->load->view('resetPassword');
+    }
 }
-// $this->db->where('id', $id);
-//         $update = $this->db->update('course_question_bank_master', $data);
-//         if ($update) {
-//             echo 1;
-//         } else {
-//             //echo 0;
-//             echo 'Update Error: ' . print_r($this->db->error(), true);
-//         }
