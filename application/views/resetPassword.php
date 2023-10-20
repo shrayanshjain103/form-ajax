@@ -9,9 +9,9 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #00f, #0f0, #f00, #ff0, #0ff, #f0f, #00f);
+            background: linear-gradient(45deg, #00f, #0ff, #f0f, #00f);
             background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
+            animation: gradient 60s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
