@@ -479,4 +479,7 @@ class Validation extends CI_Controller
     public function resetPassword(){
         $this->load->view('resetPassword');
     }
+    public function updatePassword(){
+        print_r($_POST);die;
+    }
 }

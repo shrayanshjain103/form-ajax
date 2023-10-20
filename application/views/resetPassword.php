@@ -92,28 +92,41 @@
             <div class="container">
                 <label for="currentPassword">Enter Current Password</label>
                 <input type="password" id="currentPassword" name="currentPassword">
-                <span id="Cpassword-error"></span>
+                <span id="Cpassword-error" style="color:#f00"></span>
             </div>
             <div class="container">
                 <label for="newPassword">Enter New Password:</label>
                 <input type="password" id="newPassword" name="newPassword">
-                <span id="Npassword-error"></span>
+                <span id="Npassword-error" style="color:#f00"></span>
             </div>
             <div class="container">
-                <label for="confirmPassword">Confirm Password:</label>
+                <label for="confirmPassword">Confirm New Password:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword">
-                <span id="Confirmpassword-error"></span>
+                <span id="Confirmpassword-error" style="color:#f00"></span>
             </div>
+            <br>
+            <div id="responseDiv" style="color:black"></div>
+            <br>
             <button type="submit" id="changePassword">Change New Password</button>
         </form>
+
     </div>
 </body>
 
 <script>
     $(document).ready(function() {
-        $('#changePassword').submit(function(event) {
+        $('#form').submit(function(event) {
             event.preventDefault();
-            // alert('hello');
+            if(!validateForm()){
+                return;
+            }
+            var formData=$(this).serialize();
+            $.ajax({
+                method:'POST',
+                url:"<?php echo base_url('index.php/Validation/updatePassword'); ?>",
+                data: formData,
+                dataType:"json"
+            });
         });
     });
 
@@ -124,25 +137,36 @@
         var current_pass = $("#currentPassword").val();
         var new_pass = $("#newPassword").val();
         var confirmPassword = $("#confirmPassword").val();
-        var isValid= true;
-        if(current_pass.trim()===""){
-            document.getElementById("Cpassword-error").textContent="Current Password is required";
-            isValid=false;
+        var isValid = true;
+        if (current_pass.trim() === "") {
+            document.getElementById("Cpassword-error").textContent = "Current Password is required";
+            isValid = false;
         }
-        if(new_pass.trim()===""){
-            document.getElementById("Npassword-error").textContent="Please Enter New Password";
-            isValid=false;
+        if (new_pass.trim() == "") {
+            document.getElementById("Npassword-error").textContent = "Please Enter New Password";
+            isValid = false;
         }
-        if(confirmPassword.trim()===""){
-            document.getElementById("Confirmpassword-error").textContent="Re-Enter Your New Password";
-            isValid=false;
+        if (confirmPassword.trim() == "") {
+            document.getElementById("Confirmpassword-error").textContent = "Re-Enter Your New Password";
+            isValid = false;
         }
+
+        if(isValid == true){
+            if ((new_pass == confirmPassword)  && (new_pass != "") ) {
+                document.getElementById("responseDiv").textContent = "Password Matched";
+            isValid = true;
+            } else {
+                document.getElementById("responseDiv").textContent = "Password Did Not Matched";
+                isValid = false;
+            }
+        }
+       
         return isValid;
     }
-    document.getElementById('form').addEventListener('submit',function(){
-      if(!validateForm()){
-        event.preventDefault();
-      }
+    document.getElementById('form').addEventListener('submit', function() {
+        if (!validateForm()) {
+            event.preventDefault();
+        }
     });
 </script>
 
