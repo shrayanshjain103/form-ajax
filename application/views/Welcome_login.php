@@ -121,7 +121,7 @@
             },
             dataType: 'json',
             success: function(data) {
-                //console.log(data);
+                //console.log(data); 
                 $('#name').val(data.user_name);
                 $('#email').val(data.email);
                 $('#id').val(data.id);

@@ -1,35 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(45deg, #ff0000 25%, transparent 25%, transparent 75%, #0000ff 75%);
-            background-size: 20px 20px;
+            background: linear-gradient(45deg, #00f, #0f0, #f00, #ff0, #0ff, #f0f, #00f);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         #Reset {
             border: 1px solid #ccc;
             width: 80%;
             max-width: 400px;
-            margin: 50px auto;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 10px 10px 0px 0px red, -10px -10px 0px 0px blue; /* Custom shadow pattern */
-            background-color: #f9f9f9; /* Background color for the reset form */
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            text-align: center;
+            margin: 0 auto;
         }
 
         .container {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
             font-weight: bold;
-            color: #333;
+            color: #007BFF;
+            /* Label text color */
+            margin-bottom: 5px;
         }
 
         input[type="text"],
@@ -39,23 +64,86 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            /* Prevents input fields from going out of the border */
+        }
+
+        /* Style the submit button */
+        button#changePassword {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#changePassword:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
-    <div id="Reset">
-        <div class="container">
-            <label for="email">Enter Your Email:</label>
-            <input type="email" id="email" name="email">
-        </div>
-        <div class="container">
-            <label for="password">Enter Your New Password:</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <div class="container">
-            <label for="cpassword">Confirm Password:</label>
-            <input type="password" id="cpassword" name="cpassword">
-        </div>
+    <div id="Reset" style="border: 1px solid black; border-radius:10px;">
+        <form id="form" action="" method="post">
+            <div class="container">
+                <label for="currentPassword">Enter Current Password</label>
+                <input type="password" id="currentPassword" name="currentPassword">
+                <span id="Cpassword-error"></span>
+            </div>
+            <div class="container">
+                <label for="newPassword">Enter New Password:</label>
+                <input type="password" id="newPassword" name="newPassword">
+                <span id="Npassword-error"></span>
+            </div>
+            <div class="container">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword">
+                <span id="Confirmpassword-error"></span>
+            </div>
+            <button type="submit" id="changePassword">Change New Password</button>
+        </form>
     </div>
 </body>
+
+<script>
+    $(document).ready(function() {
+        $('#changePassword').submit(function(event) {
+            event.preventDefault();
+            // alert('hello');
+        });
+    });
+
+    function validateForm() {
+        $('#Cpassword-error').text('');
+        $('#Npassword-error').text('');
+        $('#Confirmpassword-error').text('');
+        var current_pass = $("#currentPassword").val();
+        var new_pass = $("#newPassword").val();
+        var confirmPassword = $("#confirmPassword").val();
+        var isValid= true;
+        if(current_pass.trim()===""){
+            document.getElementById("Cpassword-error").textContent="Current Password is required";
+            isValid=false;
+        }
+        if(new_pass.trim()===""){
+            document.getElementById("Npassword-error").textContent="Please Enter New Password";
+            isValid=false;
+        }
+        if(confirmPassword.trim()===""){
+            document.getElementById("Confirmpassword-error").textContent="Re-Enter Your New Password";
+            isValid=false;
+        }
+        return isValid;
+    }
+    document.getElementById('form').addEventListener('submit',function(){
+      if(!validateForm()){
+        event.preventDefault();
+      }
+    });
+</script>
+
 </html>

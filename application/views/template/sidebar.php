@@ -85,13 +85,19 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-question-circle"></i>
                                 <span>Need Help?</span>
                             </a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="<?= base_url('index.php/validation/resetPassword'); ?>">
+                                <i class="bi bi-boxes"></i>
+                                <span>Change Password</span>
+                            </a>
                         </li>
 
                         <li>
