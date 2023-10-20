@@ -117,15 +117,29 @@
     $(document).ready(function() {
         $('#form').submit(function(event) {
             event.preventDefault();
-            if(!validateForm()){
+            if (!validateForm()) {
                 return;
             }
-            var formData=$(this).serialize();
+            var formData = $(this).serialize();
             $.ajax({
-                method:'POST',
-                url:"<?php echo base_url('index.php/Validation/updatePassword'); ?>",
+                method: 'POST',
+                url: "<?php echo base_url('index.php/Validation/updatePassword'); ?>",
                 data: formData,
-                dataType:"json"
+                dataType: "json",
+                success: function(res) {
+                    if(res==1){
+                        alert('Password has  been changed');
+                      window.location.href="dashboard";
+                    }
+                    else if(res==0){
+                        alert('Password has not been changed');
+                    } else{
+                        alert('Current Password Does not match');
+                    }
+                },
+                error: function(res) {
+                    alert('error');
+                }
             });
         });
     });
@@ -151,16 +165,16 @@
             isValid = false;
         }
 
-        if(isValid == true){
-            if ((new_pass == confirmPassword)  && (new_pass != "") ) {
+        if (isValid == true) {
+            if ((new_pass == confirmPassword) && (new_pass != "")) {
                 document.getElementById("responseDiv").textContent = "Password Matched";
-            isValid = true;
+                isValid = true;
             } else {
                 document.getElementById("responseDiv").textContent = "Password Did Not Matched";
                 isValid = false;
             }
         }
-       
+
         return isValid;
     }
     document.getElementById('form').addEventListener('submit', function() {

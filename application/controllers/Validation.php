@@ -476,10 +476,30 @@ class Validation extends CI_Controller
         }
     }
     // reset password funtion
-    public function resetPassword(){
+    public function resetPassword()
+    {
         $this->load->view('resetPassword');
     }
-    public function updatePassword(){
-        print_r($_POST);die;
+    public function updatePassword()
+    {
+        $id = $_SESSION['userdata']['id'];
+        $this->db->select('password');
+        $this->db->where('id', $id);
+        $password = $this->db->get('users')->row_array();
+        $sts = $_POST['newPassword'];
+        if ($password['password'] == $_POST['currentPassword']) {
+            $this->db->where('id', $id);
+            $this->db->set('password', $sts);
+            $result = $this->db->update('users');
+            if ($result) {
+                echo 1;
+              $this->session->sess_destroy();
+            } else {
+                echo 0;
+            }
+        }
+        else{
+            echo 2;
+        }
     }
 }
