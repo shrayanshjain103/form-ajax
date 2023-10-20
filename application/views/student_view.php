@@ -75,6 +75,13 @@
         color: blueviolet;
         text-decoration: none;
     }
+    #change-btn{
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        color: blueviolet;
+        text-decoration: none;
+    }
 
     .csv,
     .word {
@@ -198,6 +205,7 @@
     </div>
 
     <button id="logout-btn"><a href="<?= base_url('index.php/validation/logout'); ?>">Logout</a></button>
+    <button id='change-btn'><a href="<?= base_url('index.php/validation/resetPassword'); ?>">Change Password</a></button>
 
     <!-- Your JavaScript code -->
 
